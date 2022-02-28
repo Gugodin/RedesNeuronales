@@ -144,19 +144,40 @@ class Ventana(QMainWindow):
             self.curvas.append(neurona(self.ns[i], np.array([tuple(self.wk)])))
 
 
-        figure2 = plt.figure(figsize=(15, 10))
+        figure2 = plt.figure(figsize=(15, 7))
 
-        ax = plt.subplot(1,1,1)
+        ax = plt.subplot(1,2,1)
 
-        print(self.ns[0])
-        print(self.curvas[0])
-
+        
         ax.set_title('Grafica')
+
         for x in range(len(self.curvas)):
             ax.plot(self.curvas[x][1], self.curvas[x][0], marker='o',label=f'N={self.ns[x]}')
 
         ax.legend()
 
+        ax2 = plt.subplot(1,2,2)
+        ax2.axis('tight')
+        ax2.axis('off')
+
+        table = [['η','Ultimos pesos de W']]
+
+        for y in range(len(self.ns)):   
+
+            print(self.curvas[y][2][0])
+            redo = []
+
+            for f in range(len(self.curvas[y][2])):
+                redo.append(round(self.curvas[y][2][f],3))
+
+            table.append([self.ns[y],redo])
+
+        table = ax2.table(cellText = table, loc = 'center', cellLoc = 'center')
+        table.auto_set_font_size(False)
+        table.set_fontsize(10)
+        table.scale(1,3)
+
+        plt.tight_layout()
         plt.show()
 
         
@@ -167,7 +188,47 @@ class Ventana(QMainWindow):
             self.wk.append(round(rand.random(),3))
         
         for n in range(5):
-           self.ns.append(round(rand.uniform(1,0), 3))
+            self.ns.append(round(rand.uniform(1,0), 3))
+        
+        for i in range(len(self.ns)):
+            self.curvas.append(neurona(self.ns[i], np.array([tuple(self.wk)])))
+
+
+        figure2 = plt.figure(figsize=(15, 7))
+
+        ax = plt.subplot(1,2,1)
+
+        
+        ax.set_title('Grafica')
+
+        for x in range(len(self.curvas)):
+            ax.plot(self.curvas[x][1], self.curvas[x][0], marker='o',label=f'N={self.ns[x]}')
+
+        ax.legend()
+
+        ax2 = plt.subplot(1,2,2)
+        ax2.axis('tight')
+        ax2.axis('off')
+
+        table = [['η','Ultimos pesos de W']]
+        
+        for y in range(len(self.ns)):   
+            redo = []
+            for f in range(len(self.curvas[y][2])):
+                redo.append(round(self.curvas[y][2][f],3))
+
+            table.append([self.ns[y],redo])
+
+        table = ax2.table(cellText = table, loc = 'center', cellLoc = 'center')
+        table.auto_set_font_size(False)
+        table.set_fontsize(10)
+        table.scale(1,3)
+
+        plt.tight_layout()
+        plt.show()
+
+
+
 
 if __name__ == '__main__':
 
