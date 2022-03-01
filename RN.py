@@ -13,41 +13,13 @@ from view.MainView import Ui_MainWindow
 from PySide6.QtWidgets import *
 
 X =[
-    [1,0,0,0,0,0],
-    [1,1,0,0,0,0],
-    [1,0,1,0,0,0],
-    [1,1,1,0,0,0],
-    [1,0,0,1,0,0],
-    [1,1,0,1,0,0],
-    [1,0,1,1,0,0],
-    [1,1,1,1,0,0],
-    [1,0,0,0,1,0],
-    [1,1,0,0,1,0],
-    [1,0,1,0,1,0],
-    [1,1,1,0,1,0],
-    [1,0,0,1,1,0],
-    [1,1,0,1,1,0],
-    [1,0,1,1,1,0],
-    [1,1,1,1,1,0],
-    [1,0,0,0,0,1],
-    [1,1,0,0,0,1],
-    [1,0,1,0,0,1],
-    [1,1,1,0,0,1],
-    [1,0,0,1,0,1],
-    [1,1,0,1,0,1],
-    [1,0,1,1,0,1],
-    [1,1,1,1,0,1],
-    [1,0,0,0,1,1],
-    [1,1,0,0,1,1],
-    [1,0,1,0,1,1],
-    [1,1,1,0,1,1],
-    [1,0,0,1,1,1],
-    [1,1,0,1,1,1],
-    [1,0,1,1,1,1],
-    [1,1,1,1,1,1],
+    [1,0,0],
+    [1,1,0],
+    [1,0,1],
+    [1,1,1],
 ]
 
-Y = [0 for i in range(31)]
+Y = [0 for i in range(3)]
 Y.append(1)
 
 
@@ -57,15 +29,8 @@ X = np.array(X).transpose()
 Y = np.array(Y)
 
 
-def neurona (n,wk): 
+def entrenamiento (n,wk): 
     k = 0
-
-    # print('---------------------------')
-    # print('DATOS INICIALES')
-    # print(f'Generacion = {k}')
-    # print(f'W = {wk}')
-    # print(f'N = {n}')
-    # print('---------------------------')
 
     errores = []
     generaciones = []
@@ -87,24 +52,12 @@ def neurona (n,wk):
         for i in range(len(ek)):
             cont += ek[i]**2
 
-        # print('---------------------------')
-        # print('DATOS')
-        # print(f'Generacion = {k}')
-        # print(f'W = {wk}')
-        # print(f'Uk = {uk}')
-        # print(f'Yck = {yck}')
-        # print(f'Ek = {ek}')
-        # print(f'wt = {wt}')
-        # print(f'error = Raiz de {cont}')
-        # print('---------------------------')
-
         wk = wt
         errores.append((math.sqrt(cont)))
         generaciones.append(k)
 
         if np.all(yck == Y):
-            # print(f'Y calculada = {yck}')
-            # print(f'Y deseada = {Y}')
+
             
             return errores,generaciones,list(wk[0])
 
@@ -125,7 +78,7 @@ class Ventana(QMainWindow):
     def generateMap(self):
 
         if self.ui.ws.text() == '':
-            for i in range(6):
+            for i in range(3):
                 self.wk.append(round(rand.random(),3))
             
         else:
@@ -141,7 +94,7 @@ class Ventana(QMainWindow):
         self.ns.append(float(self.ui.n5.text()))
         
         for i in range(len(self.ns)):
-            self.curvas.append(neurona(self.ns[i], np.array([tuple(self.wk)])))
+            self.curvas.append(entrenamiento(self.ns[i], np.array([tuple(self.wk)])))
 
 
         figure2 = plt.figure(figsize=(15, 7))
@@ -161,10 +114,10 @@ class Ventana(QMainWindow):
         ax2.axis('off')
 
         table = [['η','Ultimos pesos de W']]
-
+        
         for y in range(len(self.ns)):   
 
-            print(self.curvas[y][2][0])
+            
             redo = []
 
             for f in range(len(self.curvas[y][2])):
@@ -184,14 +137,14 @@ class Ventana(QMainWindow):
             
     def generateMapRand(self):
         
-        for x in range(6):
+        for x in range(3):
             self.wk.append(round(rand.random(),3))
         
         for n in range(5):
             self.ns.append(round(rand.uniform(1,0), 3))
         
         for i in range(len(self.ns)):
-            self.curvas.append(neurona(self.ns[i], np.array([tuple(self.wk)])))
+            self.curvas.append(entrenamiento(self.ns[i], np.array([tuple(self.wk)])))
 
 
         figure2 = plt.figure(figsize=(15, 7))
@@ -232,7 +185,6 @@ class Ventana(QMainWindow):
 
 if __name__ == '__main__':
 
-    # print(neurona(0.4,wk))
 
     app = QApplication(sys.argv)
     window = Ventana()
